@@ -30,7 +30,7 @@ namespace Alarm
 
         public ObservableCollection<Alarm> Alarms { get; } = new ObservableCollection<Alarm>();
 
-        private const int SnoozeTime = 5;
+        private const int SnoozeTime = 5, AlarmFreq = 500, AlarmBeepTime = 3000, AlarmDelay = 2000;
 
         private void RefreshClock(object source = null, EventArgs ea = null) => Clock.Content = DateTime.Now.ToLongTimeString();
 
@@ -58,9 +58,14 @@ namespace Alarm
 
                 var tokenSource = new CancellationTokenSource();
                 var token = tokenSource.Token;
-                new Task(async () => { while (!token.IsCancellationRequested) { Console.Beep(500, 3000); await Task.Delay(2000); } }, token).Start();
+                new Task(async () => {
+                    while (!token.IsCancellationRequested) {
+                        Console.Beep(AlarmFreq, AlarmBeepTime);
+                        await Task.Delay(AlarmDelay);
+                    }
+                }, token).Start();
 
-                if (MessageBox.Show(string.Format(Properties.Resources.ALARM_MSGBOX_CONTENT, SnoozeTime), Properties.Resources.ALARM_MSGBOX_TITLE, MessageBoxButton.YesNo, MessageBoxImage.Question).Equals(MessageBoxResult.Yes))
+                if (MessageBoxResult.Yes.Equals(MessageBox.Show(string.Format(Properties.Resources.ALARM_MSGBOX_CONTENT, SnoozeTime), Properties.Resources.ALARM_MSGBOX_TITLE, MessageBoxButton.YesNo, MessageBoxImage.Question)))
                 {
                     dispatcher.Interval = TimeSpan.FromMinutes(SnoozeTime);
                     dispatcher.Start();

@@ -142,7 +142,7 @@
     <value>Please enter time:</value>
   </data>
   <data name="INTERACTION_NEWALARM_TITLE" xml:space="preserve">
-    <value>New alarm</value>
+    <value>New alarm...</value>
   </data>
   <data name="INVALID_TIME" xml:space="preserve">
     <value>Supplied time is invalid.</value>

@@ -133,7 +133,7 @@ namespace Alarm.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New alarm.
+        ///   Looks up a localized string similar to New alarm....
         /// </summary>
         public static string INTERACTION_NEWALARM_TITLE {
             get {
