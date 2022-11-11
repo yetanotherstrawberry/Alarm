@@ -138,6 +138,9 @@
   <data name="ERR_TITLE" xml:space="preserve">
     <value>An error has occured.</value>
   </data>
+  <data name="INTERACTION_NEWALARM_BUTTON_OK" xml:space="preserve">
+    <value>Add</value>
+  </data>
   <data name="INTERACTION_NEWALARM_CONTENT" xml:space="preserve">
     <value>Please enter time:</value>
   </data>

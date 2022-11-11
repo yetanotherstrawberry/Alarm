@@ -124,6 +124,15 @@ namespace Alarm.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string INTERACTION_NEWALARM_BUTTON_OK {
+            get {
+                return ResourceManager.GetString("INTERACTION_NEWALARM_BUTTON_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter time:.
         /// </summary>
         public static string INTERACTION_NEWALARM_CONTENT {

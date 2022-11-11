@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,16 +8,17 @@ using System.Windows.Threading;
 
 namespace Alarm
 {
-
     public partial class MainWindow : Window
     {
 
         public class Alarm
         {
-            public Alarm(DispatcherTimer dispatcher)
+            public Alarm(EventHandler handler, TimeSpan interval)
             {
+                DispatcherTimer dispatcher = CreateDispatcher(handler, interval);
                 Dispatcher = dispatcher;
                 Dispatcher.Tag = this;
+                dispatcher.Start();
             }
 
             public DispatcherTimer Dispatcher { get; }
@@ -34,7 +34,7 @@ namespace Alarm
 
         private void RefreshClock(object source = null, EventArgs ea = null) => Clock.Content = DateTime.Now.ToLongTimeString();
 
-        private DispatcherTimer CreateDispatcher(EventHandler handler, TimeSpan interval) =>
+        private static DispatcherTimer CreateDispatcher(EventHandler handler, TimeSpan interval) =>
             new DispatcherTimer(
                 callback: handler,
                 interval: interval,
@@ -47,19 +47,20 @@ namespace Alarm
 
         private void Ring(object source, EventArgs ea)
         {
-
             try
             {
-
                 var dispatcher = (DispatcherTimer)source;
                 var alarm = (Alarm)dispatcher.Tag;
+
                 dispatcher.Stop();
                 Alarms.Remove(alarm);
 
                 var tokenSource = new CancellationTokenSource();
                 var token = tokenSource.Token;
-                new Task(async () => {
-                    while (!token.IsCancellationRequested) {
+                new Task(async () =>
+                {
+                    while (!token.IsCancellationRequested)
+                    {
                         Console.Beep(AlarmFreq, AlarmBeepTime);
                         await Task.Delay(AlarmDelay);
                     }
@@ -73,26 +74,27 @@ namespace Alarm
                 }
 
                 tokenSource.Cancel();
-
             }
             catch (Exception exc)
             {
                 ShowError(exc);
             }
-
         }
 
         private void NewAlarm(object sender, RoutedEventArgs rea)
         {
-
             try
             {
-
-                string userInput = Interaction.InputBox(Properties.Resources.INTERACTION_NEWALARM_CONTENT, Properties.Resources.INTERACTION_NEWALARM_TITLE);
-
+                var modal = new NewAlarm
+                {
+                    Owner = this,
+                };
+                if (!modal.ShowDialog() ?? false) return;
+                
+                string userInput = modal.Text.Text;
                 if (string.IsNullOrEmpty(userInput)) return;
-
-                if (!TimeSpan.TryParse(userInput, out var time))
+                
+                if (!TimeSpan.TryParse(userInput, out TimeSpan time))
                 {
                     ShowError(Properties.Resources.INVALID_TIME);
                     return;
@@ -101,58 +103,43 @@ namespace Alarm
                 TimeSpan timeOfAlarm = time - DateTime.Now.TimeOfDay;
                 if (timeOfAlarm <= TimeSpan.Zero) timeOfAlarm = TimeSpan.FromDays(1) - timeOfAlarm.Duration();
 
-                var alarm = CreateDispatcher(Ring, timeOfAlarm);
-
-                Alarms.Add(new Alarm(alarm));
-
-                alarm.Start();
-
+                Alarms.Add(new Alarm(Ring, timeOfAlarm));
             }
             catch (Exception exc)
             {
                 ShowError(exc);
             }
-
         }
 
         private void DeleteAlarm(object sender, RoutedEventArgs e)
         {
-
             try
             {
-
                 var alarm = (Alarm)((Button)sender).Tag;
 
                 alarm.Dispatcher.Stop();
-
                 Alarms.Remove(alarm);
-
             }
             catch (Exception exc)
             {
                 ShowError(exc);
             }
-
         }
 
         public MainWindow()
         {
-
             try
             {
-
                 InitializeComponent();
 
                 RefreshClock();
                 CreateDispatcher(RefreshClock, TimeSpan.FromSeconds(1)).Start();
-
             }
             catch (Exception exc)
             {
                 ShowError(exc);
                 Application.Current.Shutdown();
             }
-
         }
 
     }
