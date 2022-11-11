@@ -9,12 +9,13 @@
         Title="{x:Static resx:Resources.INTERACTION_NEWALARM_TITLE}"
         KeyDown="KeyAction"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize" Height="140" Width="300" Padding="10">
+        ResizeMode="NoResize" Height="140" Width="300" Padding="10"
+        FocusManager.FocusedElement="{Binding ElementName=Text}">
     <Grid>
         <StackPanel Margin="5">
-            <TextBlock TextAlignment="Center" Margin="5" Text="{x:Static resx:Resources.INTERACTION_NEWALARM_CONTENT}"/>
+            <TextBlock TextAlignment="Center" Margin="5" Text="{x:Static resx:Resources.INTERACTION_NEWALARM_CONTENT}" />
             <TextBox Margin="5" x:Name="Text" />
-            <Button HorizontalAlignment="Center" Margin="5" Padding="2" FontSize="12" Click="CloseButton" Content="{x:Static resx:Resources.INTERACTION_NEWALARM_BUTTON_OK}"/>
+            <Button HorizontalAlignment="Center" Margin="5" Padding="2" FontSize="12" Click="CloseButton" Content="{x:Static resx:Resources.INTERACTION_NEWALARM_BUTTON_OK}" />
         </StackPanel>
     </Grid>
 </Window>

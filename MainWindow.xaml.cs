@@ -11,26 +11,22 @@ namespace Alarm
     public partial class MainWindow : Window
     {
 
-        public class Alarm
-        {
-            public Alarm(EventHandler handler, TimeSpan interval)
-            {
-                DispatcherTimer dispatcher = CreateDispatcher(handler, interval);
-                Dispatcher = dispatcher;
-                Dispatcher.Tag = this;
-                dispatcher.Start();
-            }
-
-            public DispatcherTimer Dispatcher { get; }
-            public string Time
-            {
-                get => DateTime.Now.AddTicks(Dispatcher.Interval.Ticks).ToString();
-            }
-        }
+        private const int SnoozeTime = 5, AlarmFreq = 500, AlarmBeepTime = 3000, AlarmDelay = 2000;
 
         public ObservableCollection<Alarm> Alarms { get; } = new ObservableCollection<Alarm>();
 
-        private const int SnoozeTime = 5, AlarmFreq = 500, AlarmBeepTime = 3000, AlarmDelay = 2000;
+        public class Alarm
+        {
+            public DispatcherTimer Dispatcher { get; }
+            public string Time => DateTime.Now.AddTicks(Dispatcher.Interval.Ticks).ToString();
+
+            public Alarm(EventHandler handler, TimeSpan interval)
+            {
+                Dispatcher = CreateDispatcher(handler, interval);
+                Dispatcher.Tag = this;
+                Dispatcher.Start();
+            }
+        }
 
         private void RefreshClock(object source = null, EventArgs ea = null) => Clock.Content = DateTime.Now.ToLongTimeString();
 
@@ -43,7 +39,8 @@ namespace Alarm
             );
 
         private void ShowError(Exception exc) => ShowError(exc.Message);
-        private void ShowError(string text) => MessageBox.Show(owner: this, text, Properties.Resources.ERR_TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
+        private void ShowError(string text) =>
+            MessageBox.Show(owner: this, text, Properties.Resources.ERR_TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
 
         private void Ring(object source, EventArgs ea)
         {
@@ -57,16 +54,22 @@ namespace Alarm
 
                 var tokenSource = new CancellationTokenSource();
                 var token = tokenSource.Token;
-                new Task(async () =>
+                var ring = new Task(async () =>
                 {
                     while (!token.IsCancellationRequested)
                     {
                         Console.Beep(AlarmFreq, AlarmBeepTime);
                         await Task.Delay(AlarmDelay);
                     }
-                }, token).Start();
+                }, token);
+                ring.Start();
 
-                if (MessageBoxResult.Yes.Equals(MessageBox.Show(string.Format(Properties.Resources.ALARM_MSGBOX_CONTENT, SnoozeTime), Properties.Resources.ALARM_MSGBOX_TITLE, MessageBoxButton.YesNo, MessageBoxImage.Question)))
+                if (MessageBoxResult.Yes.Equals(
+                    MessageBox.Show(
+                        string.Format(Properties.Resources.ALARM_MSGBOX_CONTENT, SnoozeTime),
+                        Properties.Resources.ALARM_MSGBOX_TITLE,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question)))
                 {
                     dispatcher.Interval = TimeSpan.FromMinutes(SnoozeTime);
                     dispatcher.Start();
@@ -74,6 +77,8 @@ namespace Alarm
                 }
 
                 tokenSource.Cancel();
+                if (ring.Exception != null)
+                    throw ring.Exception;
             }
             catch (Exception exc)
             {
@@ -85,15 +90,15 @@ namespace Alarm
         {
             try
             {
-                var modal = new NewAlarm
+                NewAlarm modal = new NewAlarm
                 {
                     Owner = this,
                 };
-                if (!modal.ShowDialog() ?? false) return;
-                
+                if (!modal.ShowDialog() ?? true) return;
+
                 string userInput = modal.Text.Text;
                 if (string.IsNullOrEmpty(userInput)) return;
-                
+
                 if (!TimeSpan.TryParse(userInput, out TimeSpan time))
                 {
                     ShowError(Properties.Resources.INVALID_TIME);
@@ -143,5 +148,4 @@ namespace Alarm
         }
 
     }
-
 }
