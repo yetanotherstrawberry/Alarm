@@ -90,7 +90,7 @@ namespace Alarm
         {
             try
             {
-                NewAlarm modal = new NewAlarm
+                var modal = new NewAlarm
                 {
                     Owner = this,
                 };
@@ -105,7 +105,7 @@ namespace Alarm
                     return;
                 }
 
-                TimeSpan timeOfAlarm = time - DateTime.Now.TimeOfDay;
+                var timeOfAlarm = time - DateTime.Now.TimeOfDay;
                 if (timeOfAlarm <= TimeSpan.Zero) timeOfAlarm = TimeSpan.FromDays(1) - timeOfAlarm.Duration();
 
                 Alarms.Add(new Alarm(Ring, timeOfAlarm));
