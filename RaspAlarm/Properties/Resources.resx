@@ -124,16 +124,13 @@
     <value>Wake up!</value>
   </data>
   <data name="APP_TITLE" xml:space="preserve">
-    <value>Alarms &amp; Clock</value>
+    <value>RaspAlarm</value>
   </data>
   <data name="BUTTON_DELETE" xml:space="preserve">
     <value>Delete</value>
   </data>
   <data name="BUTTON_NEW" xml:space="preserve">
     <value>New alarm</value>
-  </data>
-  <data name="DEF_CLOCK" xml:space="preserve">
-    <value>**:**:**</value>
   </data>
   <data name="ERR_TITLE" xml:space="preserve">
     <value>An error has occured.</value>

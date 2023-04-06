@@ -1,0 +1,67 @@
+﻿<Window x:Class="RaspAlarm.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:resx="clr-namespace:RaspAlarm.Properties"
+        xmlns:viewModels="clr-namespace:RaspAlarm.ViewModels"
+        xmlns:helpers="clr-namespace:RaspAlarm.Helpers"
+        mc:Ignorable="d"
+        Title="{x:Static resx:Resources.APP_TITLE}"
+        MinHeight="260" MinWidth="850"
+        Height="280" Width="900"
+        Closed="Window_Closed"
+        Language="{Binding Language}">
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <helpers:DialogWindowFactory x:Key="dialogFactory" />
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
+            <ListBox ItemsSource="{Binding Alarms}" d:ItemsSource="{d:SampleData ItemCount=12}" HorizontalAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch">
+                            <TextBlock
+                                Text="{Binding Time, StringFormat='G'}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center" />
+                            <Button
+                                Content="{x:Static resx:Resources.BUTTON_DELETE}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Command="{Binding DataContext.DeleteAlarmCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                CommandParameter="{Binding}"
+                                Padding="2" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </ScrollViewer>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TextBlock FontSize="128" Text="{Binding Time, StringFormat='T'}" HorizontalAlignment="Center" VerticalAlignment="Top" />
+            <Button
+                FontSize="20"
+                Content="{x:Static resx:Resources.BUTTON_NEW}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Command="{Binding NewAlarmCommand}"
+                Padding="5">
+                <Button.CommandParameter>
+                    <helpers:DialogWindowFactory />
+                </Button.CommandParameter>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

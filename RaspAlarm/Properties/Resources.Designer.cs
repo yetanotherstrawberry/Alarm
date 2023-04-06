@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Alarm.Properties {
+namespace RaspAlarm.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Alarm.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Alarm.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RaspAlarm.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -79,7 +79,7 @@ namespace Alarm.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alarms &amp; Clock.
+        ///   Looks up a localized string similar to RaspAlarm.
         /// </summary>
         public static string APP_TITLE {
             get {
@@ -102,15 +102,6 @@ namespace Alarm.Properties {
         public static string BUTTON_NEW {
             get {
                 return ResourceManager.GetString("BUTTON_NEW", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to **:**:**.
-        /// </summary>
-        public static string DEF_CLOCK {
-            get {
-                return ResourceManager.GetString("DEF_CLOCK", resourceCulture);
             }
         }
         
