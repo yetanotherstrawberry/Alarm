@@ -186,7 +186,7 @@ namespace RaspAlarm.ViewModels
             {
                 NewAlarm(dialog.ShowDialog());
             });
-            DisposeCommand = new DelegateCommand(Dispose);
+            DisposeCommand = new DelegateCommand<object>(_ => Dispose());
             DeleteAlarmCommand = new DelegateCommand<Alarm>(alarm =>
             {
                 Alarms.Remove(alarm);

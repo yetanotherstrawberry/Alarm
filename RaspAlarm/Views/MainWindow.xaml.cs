@@ -7,7 +7,7 @@ namespace RaspAlarm.Views
     {
 
         /// <summary>
-        /// Initializes the XAML window and shows it.
+        /// Initializes XAML.
         /// </summary>
         public MainWindow()
         {

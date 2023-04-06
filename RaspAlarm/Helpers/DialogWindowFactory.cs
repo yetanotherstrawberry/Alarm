@@ -8,12 +8,12 @@ namespace RaspAlarm.Helpers
 
         public string ShowDialog()
         {
-            var window = new InputWindow();
+            IInputView window = new InputWindow();
 
             if (!window.ShowDialog() ?? true)
                 return string.Empty;
 
-            var viewModel = window.DataContext as IInputViewModel;
+            var viewModel = window.DataContext;
 
             return viewModel.Text;
         }

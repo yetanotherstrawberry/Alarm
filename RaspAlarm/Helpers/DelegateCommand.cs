@@ -4,28 +4,6 @@ using System.Windows.Input;
 namespace RaspAlarm.Helpers
 {
 
-    internal class DelegateCommand : ICommand
-    {
-        private readonly Action commandAction;
-        private readonly Func<bool> canExecute;
-
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
-        public DelegateCommand(Action callback, Func<bool> execAllowed = null)
-        {
-            commandAction = callback ?? throw new ArgumentNullException(paramName: nameof(callback));
-            canExecute = execAllowed;
-        }
-
-        public void Execute(object parameter = null) => commandAction();
-
-        public bool CanExecute(object parameter = null) => canExecute == null || canExecute();
-    }
-
     internal class DelegateCommand<T> : ICommand
     {
         private readonly Action<T> commandAction;
