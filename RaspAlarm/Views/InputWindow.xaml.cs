@@ -3,6 +3,9 @@ using System.Windows;
 
 namespace RaspAlarm.Views
 {
+    /// <summary>
+    /// WPF window asking the user for input. Implements <c>IInputView</c>.
+    /// </summary>
     public partial class InputWindow : Window, IInputView
     {
 
@@ -14,9 +17,6 @@ namespace RaspAlarm.Views
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Returns ViewModel of this View.
-        /// </summary>
         IInputViewModel IInputView.DataContext => DataContext as IInputViewModel;
 
     }

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ALARM_MSGBOX_CONTENT" xml:space="preserve">
-    <value>Do you want to snooze for {0} minutes?</value>
+    <value>Would you like to snooze for {0} minutes?</value>
   </data>
   <data name="ALARM_MSGBOX_TITLE" xml:space="preserve">
     <value>Wake up!</value>
@@ -139,7 +139,7 @@
     <value>Add</value>
   </data>
   <data name="INTERACTION_NEWALARM_CONTENT" xml:space="preserve">
-    <value>Please enter time:</value>
+    <value>What time would you like to set the alarm for?</value>
   </data>
   <data name="INTERACTION_NEWALARM_TITLE" xml:space="preserve">
     <value>New alarm...</value>

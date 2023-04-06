@@ -10,14 +10,11 @@
         Title="{x:Static resx:Resources.APP_TITLE}"
         MinHeight="260" MinWidth="850"
         Height="280" Width="900"
-        Closed="Window_Closed"
+        Closing="Window_Closing"
         Language="{Binding Language}">
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
-    <Window.Resources>
-        <helpers:DialogWindowFactory x:Key="dialogFactory" />
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

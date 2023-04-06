@@ -3,10 +3,10 @@ using RaspAlarm.Interfaces;
 using RaspAlarm.Models;
 using RaspAlarm.Properties;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,12 +20,21 @@ namespace RaspAlarm.ViewModels
     internal class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
 
+        #region Constants
         private const int SnoozeMinutes = 5, AlarmFreq = 500, AlarmBeepTime = 3000, AlarmDelay = 2000, RefreshSec = 1;
+        #endregion Constants
 
+        #region Fields
         /// <summary>
         /// <c>DispatcherTimer</c> that constantly updates the <c>Time</c> field.
         /// </summary>
         private readonly DispatcherTimer timer;
+
+        /// <summary>
+        /// Field used by <c>Time</c> property.
+        /// </summary>
+        private DateTime time = DateTime.Now;
+        #endregion Fields
 
         #region Events
         /// <summary>
@@ -44,11 +53,6 @@ namespace RaspAlarm.ViewModels
         /// Deletes supplied alarm after clicking the delete button.
         /// </summary>
         public ICommand DeleteAlarmCommand { get; }
-
-        /// <summary>
-        /// Executes <c>DeleteAlarmCommand</c> on every <c>Alarm</c> and stops <c>DispatcherTimer</c> for <c>Time</c>.
-        /// </summary>
-        public ICommand DisposeCommand { get; }
         #endregion Commands
 
         #region Properties
@@ -64,7 +68,6 @@ namespace RaspAlarm.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        private DateTime time = DateTime.Now;
 
         /// <summary>
         /// Language/culture setting. Used by ToString(). Value taken from the OS.
@@ -164,18 +167,35 @@ namespace RaspAlarm.ViewModels
         }
 
         /// <summary>
-        /// Stops all <c>DispatcherTimer</c>s of alarms (by deleting them) and the clock.
+        /// Stops all alarms in the parameter.
+        /// </summary>
+        /// <param name="alarms">Alarms to be stopped.</param>
+        private void StopAlarms(IEnumerable<Alarm> alarms)
+        {
+            foreach (var alarm in alarms)
+                StopAlarm(alarm);
+        }
+
+        /// <summary>
+        /// Stops the alarm in the parameter.
+        /// </summary>
+        /// <param name="alarms">Instance of <c>Alarm</c> to be stopped.</param>
+        private void StopAlarm(Alarm alarm)
+        {
+            alarm.Stop();
+        }
+
+        /// <summary>
+        /// Stops all <c>DispatcherTimer</c>s of alarms and clock.
         /// </summary>
         public void Dispose()
         {
-            // Alarms.ToList() to avoid concurrent modification and enumeration.
-            foreach (var alarm in Alarms.ToList())
-                DeleteAlarmCommand.Execute(alarm);
+            StopAlarms(Alarms);
             timer.Stop();
         }
         #endregion Methods
 
-        #region ConstructorsDestructor
+        #region ConstructorDestructor
         /// <summary>
         /// Initiates fields and starts <c>DispatcherTimer</c> that refreshes the time.
         /// Implements commands that access fields.
@@ -186,22 +206,24 @@ namespace RaspAlarm.ViewModels
             {
                 NewAlarm(dialog.ShowDialog());
             });
-            DisposeCommand = new DelegateCommand<object>(_ => Dispose());
             DeleteAlarmCommand = new DelegateCommand<Alarm>(alarm =>
             {
                 Alarms.Remove(alarm);
-                alarm.Stop();
+                StopAlarm(alarm);
             });
             timer = DispatcherHelper.StartDispatchTimer(
                 () => Time = DateTime.Now,
                 TimeSpan.FromSeconds(RefreshSec));
         }
 
+        /// <summary>
+        /// Dispose the ViewModel just in case Dispose() was not executed.
+        /// </summary>
         ~MainWindowViewModel()
         {
             Dispose();
         }
-        #endregion ConstructorsDestructor
+        #endregion ConstructorDestructor
 
     }
 }

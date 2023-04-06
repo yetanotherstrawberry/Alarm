@@ -10,7 +10,7 @@ namespace RaspAlarm.Helpers
         {
             IInputView window = new InputWindow();
 
-            if (!window.ShowDialog() ?? true)
+            if (!window.ShowDialog() ?? true) // Return String.Empty if view aborted by user.
                 return string.Empty;
 
             var viewModel = window.DataContext;

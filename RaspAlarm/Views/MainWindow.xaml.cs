@@ -1,8 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 
 namespace RaspAlarm.Views
 {
+    /// <summary>
+    /// Main <c>Window</c> of the application.
+    /// </summary>
     public partial class MainWindow : Window
     {
 
@@ -19,7 +23,7 @@ namespace RaspAlarm.Views
         /// </summary>
         /// <param name="sender"><c>Object</c> that called this method.</param>
         /// <param name="args"><c>EventArgs</c> associated with this event.</param>
-        private void Window_Closed(object sender, EventArgs args) => (DataContext as IDisposable)?.Dispose();
+        private void Window_Closing(object sender, CancelEventArgs args) => (DataContext as IDisposable)?.Dispose();
 
     }
 }

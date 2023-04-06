@@ -61,7 +61,7 @@ namespace RaspAlarm.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to snooze for {0} minutes?.
+        ///   Looks up a localized string similar to Would you like to snooze for {0} minutes?.
         /// </summary>
         public static string ALARM_MSGBOX_CONTENT {
             get {
@@ -124,7 +124,7 @@ namespace RaspAlarm.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enter time:.
+        ///   Looks up a localized string similar to What time would you like to set the alarm for?.
         /// </summary>
         public static string INTERACTION_NEWALARM_CONTENT {
             get {

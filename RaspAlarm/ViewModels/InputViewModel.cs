@@ -4,6 +4,9 @@ using System.Windows.Input;
 
 namespace RaspAlarm.ViewModels
 {
+    /// <summary>
+    /// Implementation for <c>IInputViewModel</c>.
+    /// </summary>
     internal class InputViewModel : IInputViewModel
     {
 
@@ -13,29 +16,18 @@ namespace RaspAlarm.ViewModels
         public string Text { get; set; }
 
         /// <summary>
-        /// Clears the <c>InputText</c> and closes the view.
-        /// </summary>
-        public ICommand AbortCommand { get; private set; }
-
-        /// <summary>
         /// Closes the view.
         /// </summary>
-        public ICommand CloseCommand { get; private set; }
+        public ICommand DoneCommand { get; private set; }
 
         /// <summary>
         /// Implements commands.
         /// </summary>
         public InputViewModel()
         {
-            AbortCommand = new DelegateCommand<IInputView>(view =>
+            DoneCommand = new DelegateCommand<IInputView>(view =>
             {
-                view.DialogResult = false;
-                Text = string.Empty;
-                CloseCommand.Execute(view);
-            });
-            CloseCommand = new DelegateCommand<IInputView>(view =>
-            {
-                view.DialogResult = view.DialogResult ?? true;
+                view.DialogResult = view.DialogResult ?? !string.IsNullOrWhiteSpace(Text);
                 view.Close();
             });
         }

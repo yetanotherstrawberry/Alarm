@@ -2,14 +2,19 @@
 using RaspAlarm.Models;
 using RaspAlarm.ViewModels;
 using System;
-using System.Linq;
+using System.Threading;
 
 namespace RaspAlarm.Tests
 {
+    /// <summary>
+    /// Tests for RaspAlarm.
+    /// </summary>
     [TestClass]
     public class UnitTests
     {
-
+        /// <summary>
+        /// <c>DataContext</c> of the <c>Window</c> of the aplication.
+        /// </summary>
         private readonly MainWindowViewModel vm;
 
         public UnitTests()
@@ -20,9 +25,12 @@ namespace RaspAlarm.Tests
              * It is hard to test DispatcherTimers as awaiting anything will block the test thread and
              * the binary is not a WPF application, so Dispatcher does not exist (cannot use Dispatcher.Yield()).
              */
-            vm.DisposeCommand.Execute(null);
+            vm.Dispose();
         }
 
+        /// <summary>
+        /// Checks adding and deleting of alarms.
+        /// </summary>
         [TestMethod]
         public void CheckAlarmListAddRemove()
         {
@@ -31,18 +39,22 @@ namespace RaspAlarm.Tests
             var alarm2 = new Alarm(_ => { }, TimeSpan.Zero);
 
             vm.Alarms.Add(alarm1);
-            Assert.IsTrue(vm.Alarms.Contains(alarm1));
-            vm.DeleteAlarmCommand.Execute(alarm1);
-            Assert.IsFalse(vm.Alarms.Contains(alarm1));
-
-            vm.Alarms.Add(alarm1);
             vm.Alarms.Add(alarm2);
             Assert.IsTrue(vm.Alarms.Count == 2);
-            vm.DisposeCommand.Execute(null);
-            Assert.IsFalse(vm.Alarms.Any());
+            vm.Dispose(); // Stop added alarms.
 
-            alarm1.Stop();
-            alarm2.Stop();
+            vm.DeleteAlarmCommand.Execute(alarm1);
+            vm.DeleteAlarmCommand.Execute(alarm2);
+            Assert.IsTrue(vm.Alarms.Count == 0);
+        }
+
+        /// <summary>
+        /// Checks if application language is equal to current culture.
+        /// </summary>
+        [TestMethod]
+        public void LangTest()
+        {
+            Assert.IsTrue(vm.Language.GetSpecificCulture().Equals(Thread.CurrentThread.CurrentCulture));
         }
 
     }

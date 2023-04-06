@@ -16,12 +16,8 @@
     </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding
-            Key="Esc"
-            Command="{Binding AbortCommand}"
-            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
-        <KeyBinding
             Key="Return"
-            Command="{Binding CloseCommand}"
+            Command="{Binding DoneCommand}"
             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
     </Window.InputBindings>
     <Grid>
@@ -36,7 +32,7 @@
                 Margin="5"
                 Padding="2"
                 FontSize="12"
-                Command="{Binding CloseCommand}"
+                Command="{Binding DoneCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                 Content="{x:Static resx:Resources.INTERACTION_NEWALARM_BUTTON_OK}" />
         </StackPanel>
