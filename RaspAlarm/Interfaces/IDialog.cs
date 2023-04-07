@@ -1,5 +1,8 @@
 ﻿namespace RaspAlarm.Interfaces
 {
+    /// <summary>
+    /// Provides a method for getting a string input from user.
+    /// </summary>
     internal interface IDialog
     {
 
